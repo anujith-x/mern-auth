@@ -5,11 +5,14 @@ import About from './pages/About'
 import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import Header from './components/Header'
 
 const App = () => {
   return (
     <div>
       <BrowserRouter >
+      {/* Header/navbar: {Components outside the 'Routes' persist in all pages} */}
+      <Header/>
        <Routes>
          <Route path='/' element={<Home/>}/>
          <Route path='/about' element={<About/>}/>
