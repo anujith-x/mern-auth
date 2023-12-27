@@ -1,0 +1,5 @@
+# Excluded the .env folder into github
+/server/.env
+
+/server/node_modules
+
