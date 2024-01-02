@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -8,6 +8,7 @@ const SignUp = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault(); //This will prevent the page from 'refreshing' after submit(which is its(form) default behaviour)
     try {
@@ -25,6 +26,7 @@ const SignUp = () => {
     if(data.success === false) {
       setError(true)
     }
+    navigate('/')
     } catch (error) {
       setLoading(false)
       setError(true)
