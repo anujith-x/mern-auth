@@ -1,21 +1,27 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { signInStart, signInFailure, signInSuccess } from "../redux/user/userSlice.js";
+import {useDispatch, useSelector} from 'react-redux'
+
 
 const SignIn = () => {
 
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+  // const [error, setError] = useState(null)
+  // const [loading, setLoading] = useState(false)
+  const {loading, error} = useSelector((state) => state.user)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
     e.preventDefault(); //This will prevent the page from 'refreshing' after submit(which is its(form) default behaviour)
     try {
-      setLoading(true)
-      setError(false)
+      dispatch(signInStart())
+      // setLoading(true)
+      // setError(false)
       const res = await fetch("http://localhost:3000/api/auth/signin", {
       method: "POST",
       headers: {
@@ -24,14 +30,17 @@ const SignIn = () => {
       body: JSON.stringify(formData)
     });
     const data = await res.json();
-    setLoading(false)
+    // setLoading(false)
     if(data.success === false) {
-      setError(true)
+      // setError(true)
+      dispatch(signInFailure(data.message))
     }
+    dispatch(signInSuccess(data))
     navigate('/')
     } catch (error) {
-      setLoading(false)
-      setError(true)
+      // setLoading(false)
+      // setError(true)
+      dispatch(signInFailure(error))
     }
   };
   return (
@@ -62,7 +71,7 @@ const SignIn = () => {
           <span className="text-blue-500">Sign up</span>
         </Link>
       </div>
-      <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
+      <p className="text-red-700 mt-5">{error ? error.message || "Something went wrong!" : " "}</p>
     </div>
   );
 };
